@@ -1,14 +1,13 @@
 require "tweet_watch/version"
+require "tweet_watch/config"
 require "tweet_watch/follower"
 require "twitter"
-require 'ap'
 
 module TweetWatch
   
-  @config = {
-    consumer_key: "jKgFRB9dogVmyRB1P4Wm5J7CN",
-    consumer_secret: "oMswt4MMBJxrtfQ27JkmbuLfHMvkZKrlSpIcT8AdmubJcSjlpT"
-  }
+  def self.root
+      File.dirname __dir__
+  end
   
   def self.run
     f = Follower.new("ajoabraham", 
