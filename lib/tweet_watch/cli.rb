@@ -42,6 +42,30 @@ module TweetWatch
       
     end    
     
+    desc "watch", "Watches a stream to track tweets from specific tweeters"
+    option :o, desc: "output file - will append if files exists", default: "tweet_watch.csv"
+    option :u, desc: "the screename of the user to authenticate access for"
+    def watch        
+      file = File.open(options[:o], "a+")
+      tw_config = TweetWatch.config
+      
+      unless file.size > 0
+        file.puts "timelined_at, tweet_id, screen_name, text, tweet_created_at, is_reply, is_quote"
+      end
+      
+      streaming_client(options[:u]).user do |obj|
+        time = Time.now
+        if obj.class == Twitter::Tweet
+          TweetWatch.print_tweet obj
+          
+          if tw_config.tweeters.include?(obj.user.screen_name)
+            puts "recording tweet data"            
+            file.puts "\"#{time.utc}\", \"#{obj.id}\", \"#{obj.user.screen_name}\", \"#{obj.text}\", \"#{obj.created_at.getutc}\",\"#{obj.user.screen_name}\", \"#{obj.reply?}\", \"#{obj.quote?}\""
+          end
+          
+        end
+      end
+    end
     
   end
   
