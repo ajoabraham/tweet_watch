@@ -2,6 +2,4 @@
 
 require 'tweet_watch'
 
-puts "running..."
-
-TweetWatch::run
+TweetWatch::CLI.start(ARGV)

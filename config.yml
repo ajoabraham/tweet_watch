@@ -1,14 +1,11 @@
-
 credentials:
   consumer_key: jKgFRB9dogVmyRB1P4Wm5J7CN
   consumer_secret: oMswt4MMBJxrtfQ27JkmbuLfHMvkZKrlSpIcT8AdmubJcSjlpT
 
-
-followers:
- _
- screen_name: ajoabraham
- access_token: 17609705-Fd9WcmbEEFFftEwxxFvF1FOgtZ1S4E1YNnj0XcPyc  
- access_token_secret: VIge9jyWlz9k9qe0jVK3gHoSwqMlgsi0cRZwZEYpWXu6G
+users:
+  - screen_name: ajoabraham
+    access_token: 17609705-Fd9WcmbEEFFftEwxxFvF1FOgtZ1S4E1YNnj0XcPyc  
+    access_token_secret: VIge9jyWlz9k9qe0jVK3gHoSwqMlgsi0cRZwZEYpWXu6G
  
 tweeters:
  - scottadamsays
