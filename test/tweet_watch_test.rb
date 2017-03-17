@@ -24,8 +24,8 @@ class TweetWatchTest < Minitest::Test
     
     assert !c.consumer_key.nil?
     assert !c.consumer_secret.nil?
-    assert_equal 2,c.tweeters.size, "should have 2 tweeters in config file"
-    assert_equal 1,c.users.size,"should have 2 followers in config file"
+    assert_equal 4,c.tweeters.size, "should have 2 tweeters in config file"
+    assert_equal 2,c.users.size,"should have 2 followers in config file"
   end
   
   def test_config_validation
