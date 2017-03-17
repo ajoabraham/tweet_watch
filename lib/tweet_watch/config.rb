@@ -14,10 +14,14 @@ module TweetWatch
     
     def load_from_path(config_path)
       c = YAML.load_file(config_path)
-      self.consumer_key = c["consumer_key"] unless c["consumer_key"].nil?
-      self.consumer_secret = c["consumer_secret"] unless c["consumer_secret"].nil?
-      self.count = c["count"] unless c["count"].nil?
-            
+      
+      unless c["credentials"].nil?
+        cc = c["credentials"]
+        self.consumer_key = cc["consumer_key"] unless cc["consumer_key"].nil?
+        self.consumer_secret = cc["consumer_secret"] unless cc["consumer_secret"].nil?
+        self.count = cc["count"] unless cc["count"].nil?
+      end
+                  
       unless c["users"].nil?
         c["users"].each do |f|
           self.users << User.new(f["screen_name"], f["access_token"], f["access_token_secret"])

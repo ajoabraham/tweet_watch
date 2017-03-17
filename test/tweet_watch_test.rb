@@ -22,6 +22,8 @@ class TweetWatchTest < Minitest::Test
     c = TweetWatch::Config.new
     c.load_from_path(File.join(File.dirname(__dir__), 'config.yml' ))
     
+    assert !c.consumer_key.nil?
+    assert !c.consumer_secret.nil?
     assert_equal 2,c.tweeters.size, "should have 2 tweeters in config file"
     assert_equal 1,c.users.size,"should have 2 followers in config file"
   end
