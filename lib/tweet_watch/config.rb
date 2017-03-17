@@ -13,12 +13,15 @@ module TweetWatch
       else
         @config_path = config_path
       end
+      
+      load_from_path
     end
     
     private
     
     def load_from_path
-     
+      config = YAML.load(config_path)
+      puts config
     end
     
   end
