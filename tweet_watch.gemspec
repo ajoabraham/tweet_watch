@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'tweet_ban/version'
+require 'tweet_watch/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "tweet_ban"
-  spec.version       = TweetBan::VERSION
+  spec.name          = "tweet_watch"
+  spec.version       = TweetWatch::VERSION
   spec.authors       = ["Ajo Abraham"]
   spec.email         = ["abraham.ajo@gmail.com"]
 

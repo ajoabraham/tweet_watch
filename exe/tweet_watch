@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
-require 'tweet_ban'
+require 'tweet_watch'
 
 puts "running..."
 
-TweetBan::run
+TweetWatch::run

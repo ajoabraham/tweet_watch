@@ -1,4 +1,4 @@
-module TweetBan
+module TweetWatch
   
   class Follower
     attr_accessor :screen_name, :access_token, :access_token_secret
@@ -6,7 +6,7 @@ module TweetBan
     def initialize(screen_name, token, secret)
       @screen_name = screen_name
       @access_token = token
-      @acess_token_secret = secret      
+      @access_token_secret = secret      
     end
     
   end
