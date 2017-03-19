@@ -1,12 +1,11 @@
 module TweetWatch
   class Config
-    attr_accessor :consumer_key, :consumer_secret, :count, 
-      :users, :tweeters
+    attr_accessor :count, :accounts, :tweeters
     
     attr_reader :error_message
     
     def initialize
-      @users = []
+      @accounts = []
       @tweeters = []
       @count = 50
       @error_message = ""
@@ -14,17 +13,12 @@ module TweetWatch
     
     def load_from_path(config_path)
       c = YAML.load_file(config_path)
-      
-      unless c["credentials"].nil?
-        cc = c["credentials"]
-        self.consumer_key = cc["consumer_key"] unless cc["consumer_key"].nil?
-        self.consumer_secret = cc["consumer_secret"] unless cc["consumer_secret"].nil?
-        self.count = cc["count"] unless cc["count"].nil?
-      end
                   
-      unless c["users"].nil?
-        c["users"].each do |f|
-          self.users << User.new(f["screen_name"], f["access_token"], f["access_token_secret"])
+      unless c["accounts"].nil?
+        c["accounts"].each do |f|
+          self.accounts << Account.new(f["screen_name"], 
+            f["consumer_key"], f["consumer_secret"],
+            f["access_token"], f["access_token_secret"])
         end        
       end
       
@@ -34,18 +28,12 @@ module TweetWatch
         end        
       end
       
-      return c
+      self
     end
     
     def valid?
       @error_message = ""
-      [:consumer_key, :consumer_secret].each do |m|
-        if self.send(m).nil?
-          @error_message += "#{m.to_s.capitalize} is missing \n"
-        end
-      end
-      
-      @error_message += "There should be at least one user" if users.size ==0
+      @error_message += "There should be at least one account" if accounts.size ==0
       @error_message.strip().length == 0
     end
     

@@ -14,7 +14,7 @@ class TweetWatchTest < Minitest::Test
       config.consumer_key = "baldsjfasdf"
       config.consumer_secret = "absdfsdfa"
       config.tweeters = ["scottadamsays", "jaketapper", "potus"]
-      config.users << TweetWatch::User.new("crenditialeduser", "accesskey", "accesssecret")
+      config.accounts << TweetWatch::Account.new("crenditialedaccount", "accesskey", "accesssecret")
     end    
   end
   
@@ -25,7 +25,7 @@ class TweetWatchTest < Minitest::Test
     assert !c.consumer_key.nil?
     assert !c.consumer_secret.nil?
     assert_equal 4,c.tweeters.size, "should have 2 tweeters in config file"
-    assert_equal 2,c.users.size,"should have 2 followers in config file"
+    assert_equal 2,c.accounts.size,"should have 2 followers in config file"
   end
   
   def test_config_validation
@@ -36,9 +36,9 @@ class TweetWatchTest < Minitest::Test
      assert !c.valid?, "should not be valid"
      
      c.consumer_secret = "basf"
-     assert !c.valid?, "should not be valid due to missing user"
+     assert !c.valid?, "should not be valid due to missing account"
        
-     c.users << TweetWatch::User.new("crenditialeduser", "accesskey", "accesssecret")
+     c.accounts << TweetWatch::Account.new("crenditialedaccount", "accesskey", "accesssecret")
      assert c.valid?, "should be valid"
   end
   

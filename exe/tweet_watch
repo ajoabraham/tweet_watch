@@ -2,4 +2,8 @@
 
 require 'tweet_watch'
 
-TweetWatch::CLI.start(ARGV)
+begin
+  TweetWatch::CLI.start(ARGV)
+rescue Interrupt
+  puts "\nExiting..."
+end
