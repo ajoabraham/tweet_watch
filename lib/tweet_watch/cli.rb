@@ -1,25 +1,20 @@
 require 'colorize'
 
 module TweetWatch
-  
-  def self.print_tweet(tw)
-      puts "\n---".colorize(:light_red)
-      puts "#{tw.user.name} (@#{tw.user.screen_name})".colorize(:light_yellow) + " FW: #{tw.user.followers_count}".colorize(:green)
-      puts tw.text.colorize(:light_cyan)
-      puts "#{(Time.now - tw.created_at).round(2)} secs ago".colorize(:light_red) +" RT: #{tw.retweet_count} LK: #{tw.favorite_count}\n".colorize(:green)
-  end
-  
+    
   class CLI < Thor
     include Client
+    include Utils
     
     class_option :screen_name, aliases: "-u", 
             desc: "The screename of the account. If not included, will select the first account from the config file."
-    class_option :config, aliases: "-c", 
+    class_option :config_file, aliases: "-c", 
                     desc: "Yaml config file path"
     
           
     desc "limits", "Print out the current rate limits"
     def limits
+      load_config(options)
       resp = Twitter::REST::Request.new(client, 'get', "/1.1/application/rate_limit_status.json" ).perform
       
       current_time = Time.now.to_i
@@ -32,16 +27,22 @@ module TweetWatch
       end
     end
     
-    desc "timeline", "Prints out an accounts timeline. Recent 20 tweets."
+    desc "timeline", "Prints out an accounts timeline"
     option :stream, aliases: "-s", 
             desc: "Will stream a tweets as they come in instead of printing the latest timeline."
+    option :count, aliases: "-c", default: 50, type: :numeric,
+            desc: "Number of past tweets to print out. Max history is 200"
     def timeline
+      load_config(options)
+      
       if options[:stream]
         sc = streaming_client(options)
         puts "Starting stream...".colorize(:light_cyan)
         sc.user do |obj|
           if obj.class == Twitter::Tweet
             TweetWatch.print_tweet obj
+          elsif obj.class == Twitter::DirectMessage
+            TweetWatch.print_dm obj
           end
         end
       else
@@ -57,9 +58,12 @@ module TweetWatch
             desc: "output file - will append if files exists", default: "tweet_watch.csv"
     option :tweeters, aliases: "-t", type: :array,
             desc: "list of tweeters to filter recorded tweets by"
-    option :tweeters_only, aliases: "-to",
+    option :tweeters_only, aliases: "-f",
             desc: "only prints to screen provided list of tweeters"
-    def watch        
+    def watch
+      load_config(options)
+              
+      sc = streaming_client(options)
       file = File.open(options[:output], "a+")
       tw_config = TweetWatch.config
       
@@ -68,23 +72,28 @@ module TweetWatch
       unless file.size > 0
         file.puts "timelined_at, tweet_id, screen_name, text, tweet_created_at, is_reply, is_quote"
       end
-      
-      sc = streaming_client(options)
+            
       puts "Starting stream...".colorize(:light_cyan)
       sc.user do |obj|
         time = Time.now
-        if obj.class == Twitter::Tweet
-          
+        
+        if obj.class == Twitter::Tweet          
           if options[:tweeters_only].nil? || (options[:tweeters_only] && tweeters.include?(obj.account.screen_name))
-            TweetWatch.print_tweet obj
+            print_tweet obj
           end
           
-          if tw_config.tweeters.empty? || tweeters.include?(obj.account.screen_name)
-            puts "recording tweet data"            
-            file.puts "\"#{time.utc}\", \"#{obj.id}\", \"#{obj.account.screen_name}\", \"#{obj.text}\", \"#{obj.created_at.getutc}\",\"#{obj.account.screen_name}\", \"#{obj.reply?}\", \"#{obj.quote?}\""
+          if tw_config.tweeters.empty? || tweeters.include?(obj.user.screen_name)
+            puts "recording tweet data".colorize(:red)            
+            file.puts "#{time.utc}, #{obj.id}, \"#{escape_str(obj.user.screen_name)}\", \"#{escape_str(obj.text)}\", #{obj.created_at.getutc},\"#{escape_str(obj.user.screen_name)}\", #{obj.reply?}, #{obj.quote?}"
           end
-          
+        elsif obj.class == Twitter::DirectMessage
+          print_dm obj
+        elsif obj.class == Twitter::Streaming::StallWarning
+          warn "Falling behind!"
+        else
+          puts "untracked tweet obj #{obj.class}".colorize(color: :black, background: :light_white)
         end
+      
       end
     end
     

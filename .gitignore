@@ -7,3 +7,5 @@
 /pkg/
 /spec/reports/
 /tmp/
+*.csv
+config-real.yml

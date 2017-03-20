@@ -1,14 +1,14 @@
 accounts:
   - screen_name: ajoabraham
-    access_token: 17609705-Fd9WcmbEEFFftEwxxFvF1FOgtZ1S4E1YNnj0XcPyc  
-    access_token_secret: VIge9jyWlz9k9qe0jVK3gHoSwqMlgsi0cRZwZEYpWXu6G
-    consumer_key: jKgFRB9dogVmyRB1P4Wm5J7CN
-    consumer_secret: oMswt4MMBJxrtfQ27JkmbuLfHMvkZKrlSpIcT8AdmubJcSjlpT
+    access_token: YOUR_ACCESS_TOKEN 
+    access_token_secret: YOUR_ACCESS_TOKEN_SECRET
+    consumer_key: YOUR_CONSUMER_KEY
+    consumer_secret: YOUR_CONSUMER_SECRET
   - screen_name: lodr_io
-    access_token: 797120884146311169asdf-OggIoXEHI1SqnTDuKmp87HSd3O22bw4
-    access_token_secret: Zsl1Pbl7snrmjwfdsv7q2cZpVTAeYCjzDlu3C4k2eEtWMxh1
-    consumer_key: jKgFRB9dossgVmyRB1P4Wm5J7CN
-    consumer_secret: oMswt4MMBJxrta3fQ27JkmbuLfHMvkZKrlSpIcT8AdmubJcSjlpT
+    access_token: YOUR_ACCESS_TOKEN 
+    access_token_secret: YOUR_ACCESS_TOKEN_SECRET
+    consumer_key: YOUR_CONSUMER_KEY
+    consumer_secret: YOUR_CONSUMER_SECRET
  
 tweeters:
  - scottadamsays

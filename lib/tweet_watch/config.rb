@@ -1,6 +1,6 @@
 module TweetWatch
   class Config
-    attr_accessor :count, :accounts, :tweeters
+    attr_accessor :count, :accounts, :tweeters, :path
     
     attr_reader :error_message
     
@@ -11,8 +11,13 @@ module TweetWatch
       @error_message = ""
     end
     
-    def load_from_path(config_path)
-      c = YAML.load_file(config_path)
+    def load_from_path(path)
+      unless File.exists?(path)
+        raise ArgumentError.new("The provided config file could not be located: #{path}")
+      end
+      
+      @path = path
+      c = YAML.load_file(@path)
                   
       unless c["accounts"].nil?
         c["accounts"].each do |f|
@@ -35,6 +40,18 @@ module TweetWatch
       @error_message = ""
       @error_message += "There should be at least one account" if accounts.size ==0
       @error_message.strip().length == 0
+    end
+    
+    def get_account(screen_name = nil)
+      account = @accounts.first
+      
+      unless screen_name.nil?
+        res = @accounts.select { |u| u.screen_name.strip() == screen_name.strip() }
+        account = res.first if res.size > 0
+      end
+      
+      return account
+      
     end
     
   end
