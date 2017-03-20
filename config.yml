@@ -1,3 +1,11 @@
+# Configure all the accounts you want to track.
+# You can go to dev https://apps.twitter.com/ to 
+# create an app.  This will get you credentials.
+# You then have to go into the app to generate access
+# tokens.
+#
+# Add multiple accounts here and pass -u command to 
+# select the tracking user
 accounts:
   - screen_name: ajoabraham
     access_token: YOUR_ACCESS_TOKEN 
@@ -10,6 +18,9 @@ accounts:
     consumer_key: YOUR_CONSUMER_KEY
     consumer_secret: YOUR_CONSUMER_SECRET
  
+# When using the watch command you can choose
+# tweets from cerntail users to be recorded as CSV
+# The following tweeters will be recorded
 tweeters:
  - scottadamsays
  - jaketapper

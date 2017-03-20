@@ -8,7 +8,7 @@ module TweetWatch
     
     class_option :screen_name, aliases: "-u", 
             desc: "The screename of the account. If not included, will select the first account from the config file."
-    class_option :config_file, aliases: "-c", 
+    class_option :config_file, aliases: "-c",  required: true,
                     desc: "Yaml config file path"
     
           
@@ -40,14 +40,14 @@ module TweetWatch
         puts "Starting stream...".colorize(:light_cyan)
         sc.user do |obj|
           if obj.class == Twitter::Tweet
-            TweetWatch.print_tweet obj
+            print_tweet obj
           elsif obj.class == Twitter::DirectMessage
-            TweetWatch.print_dm obj
+            print_dm obj
           end
         end
       else
         client(options).home_timeline.each do |tw|
-          TweetWatch.print_tweet(tw)
+          print_tweet(tw)
         end
       end 
       
