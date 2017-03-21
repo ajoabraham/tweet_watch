@@ -29,11 +29,16 @@ module TweetWatch
       
       unless c["tweeters"].nil?
         c["tweeters"].each do |t|
-          self.tweeters << t
+          self.tweeters << t unless has_tweeter?(t)
         end        
       end
       
       self
+    end
+    
+    def has_tweeter?(tweeter)
+      res = @tweeters.find{|t| t.downcase.strip == tweeter.downcase.strip }
+      res != nil
     end
     
     def valid?

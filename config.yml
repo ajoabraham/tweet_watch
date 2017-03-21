@@ -19,10 +19,15 @@ accounts:
     consumer_secret: YOUR_CONSUMER_SECRET
  
 # When using the watch command you can choose
-# tweets from cerntail users to be recorded as CSV
-# The following tweeters will be recorded
+# tweets from certain users to be recorded as CSV
+# The following tweeters will be recorded. Remove
+# this if you want all tweets to be recorded.
 tweeters:
  - scottadamsays
  - jaketapper
  - lodr_io
  - newsycombinator
+
+monitor:
+ interval: 10
+ account_timeline_history: 100

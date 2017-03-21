@@ -1,4 +1,6 @@
 require 'colorize'
+require 'csv'
+require 'tweet_watch/monitor'
 
 module TweetWatch
     
@@ -30,7 +32,7 @@ module TweetWatch
     desc "timeline", "Prints out an accounts timeline"
     option :stream, aliases: "-s", 
             desc: "Will stream a tweets as they come in instead of printing the latest timeline."
-    option :count, aliases: "-c", default: 50, type: :numeric,
+    option :count, aliases: "-n", default: 50, type: :numeric,
             desc: "Number of past tweets to print out. Max history is 200"
     def timeline
       load_config(options)
@@ -46,7 +48,8 @@ module TweetWatch
           end
         end
       else
-        client(options).home_timeline.each do |tw|
+        opts = {count: options[:count]}
+        client(options).home_timeline(opts).each do |tw|
           print_tweet(tw)
         end
       end 
@@ -64,13 +67,13 @@ module TweetWatch
       load_config(options)
               
       sc = streaming_client(options)
-      file = File.open(options[:output], "a+")
+      file = CSV.open(options[:output], "wb")
       tw_config = TweetWatch.config
       
       tweeters = options[:tweeters] ? options[:tweeters] : tw_config.tweeters
       
-      unless file.size > 0
-        file.puts "timelined_at, tweet_id, screen_name, text, tweet_created_at, is_reply, is_quote"
+      unless File.size(options[:output]) > 0
+        file << %W(timelined_at tweet_id screen_name text tweet_created_at is_reply is_quote)
       end
             
       puts "Starting stream...".colorize(:light_cyan)
@@ -82,9 +85,10 @@ module TweetWatch
             print_tweet obj
           end
           
-          if tw_config.tweeters.empty? || tweeters.include?(obj.user.screen_name)
+          if tw_config.tweeters.empty? || tw_config.has_tweeter?(obj.user.screen_name)
             puts "recording tweet data".colorize(:red)            
-            file.puts "#{time.utc}, #{obj.id}, \"#{escape_str(obj.user.screen_name)}\", \"#{escape_str(obj.text)}\", #{obj.created_at.getutc},\"#{escape_str(obj.user.screen_name)}\", #{obj.reply?}, #{obj.quote?}"
+            file << [time.utc, obj.id, obj.user.screen_name, obj.text,obj.created_at.getutc,obj.user.screen_name, obj.reply?, obj.quote?]
+            file.flush
           end
         elsif obj.class == Twitter::DirectMessage
           print_dm obj
@@ -97,6 +101,13 @@ module TweetWatch
       end
     end
     
+    desc "monitor", "Monitors target tweeters tweets and provided account timelines."
+    def monitor
+      load_config(options)
+      m = TweetWatch::Monitor.new
+      m.run        
+    end
+        
   end
   
 end
