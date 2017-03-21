@@ -9,7 +9,11 @@ module TweetWatch
     include TweetWatch::Client
     include TweetWatch::Utils
     
-    def initialize
+    def initialize(options = {})
+      @options = {interval: (15*60), 
+                  initial_tweet_history: 200,
+                  timeline_count: 200}.merge(options)
+                  
       @new_tweeter_tweets = 0
       
       if TweetWatch.config.tweeters.empty?
@@ -37,7 +41,7 @@ module TweetWatch
       
       @new_tweeter_tweets = 0
       
-      sleep(20)      
+      sleep(@options[:interval])      
       self.run
     end
     
@@ -48,7 +52,7 @@ module TweetWatch
       
       c = client({screen_name: account.screen_name})
       time = Time.now.utc
-      timeline = c.home_timeline({count: 200})
+      timeline = c.home_timeline({count: @options[:timeline_count]})
       
       file = CSV.open("account_timeline.csv", "a+")
       unless File.size("account_timeline.csv") > 0
@@ -66,7 +70,7 @@ module TweetWatch
       puts "collecting @#{tweeter} tweets..."
       time = Time.now.utc
       
-      opts = {count: 200}
+      opts = {count: @options[:initial_tweet_history]}
       if @tweeter_state[tweeter]
         opts[:since_id] = @tweeter_state[tweeter]
       end
