@@ -95,15 +95,16 @@ module TweetWatch
         elsif obj.class == Twitter::Streaming::StallWarning
           warn "Falling behind!"
         else
-          puts "untracked tweet obj #{obj.class}".colorize(color: :black, background: :light_white)
+          # do nothing for now
+          #puts "untracked tweet obj #{obj.class}".colorize(color: :black, background: :light_white)
         end
       
       end
     end
     
     desc "monitor", "Monitors target tweeters tweets and provided account timelines."
-    option :interval, aliases: "-i", desc: "Time delay between each monitoring run. Default = 15 mins."
-    option :initial_tweet_history, aliases: "-hn", desc: "When started Monitor will collect 200 tweets by defaul for each tweeter."
+    option :interval, aliases: "-i", desc: "Time delay in seconds between each monitoring run. Default = 15 mins."
+    option :initial_tweet_history, aliases: "-h", desc: "When started Monitor will collect 200 tweets by defaul for each tweeter."
     option :timeline_count, aliases: "-n", desc: "For each monitor run, how many tweets should be collected. 200 by default is also the max."
     def monitor      
       load_config(options)

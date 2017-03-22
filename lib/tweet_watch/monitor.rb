@@ -12,8 +12,10 @@ module TweetWatch
     def initialize(options = {})
       @options = {interval: (15*60), 
                   initial_tweet_history: 200,
-                  timeline_count: 200}.merge(options)
-                  
+                  timeline_count: 200}
+      @options.merge!(Hash[options.map{ |k, v| [k.to_sym, v] }])      
+      @options[:interval] = @options[:interval].to_i
+      
       @new_tweeter_tweets = 0
       
       if TweetWatch.config.tweeters.empty?

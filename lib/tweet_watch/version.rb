@@ -1,3 +1,3 @@
 module TweetWatch
-  VERSION = "0.2.3.pre"
+  VERSION = "0.2.3"
 end

@@ -12,7 +12,7 @@ module TweetWatch
     end
     
     def load_from_path(path)
-      unless File.exists?(path)
+      unless File.exist?(path)
         raise ArgumentError.new("The provided config file could not be located: #{path}")
       end
       
