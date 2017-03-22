@@ -4,7 +4,7 @@ TweetWatch can be used to collect timeline data from several accounts and from s
 
 This gem is designed to be used as CLI tool but is not a full fledged alternative to the [twitter CLI](https://github.com/sferik/t).  The primary goal of this gem is to collect twitter data perodically.
 
-![Image of TweetWatch timeline streaming](timeline_streaming)
+![Image of TweetWatch timeline streaming](https://raw.githubusercontent.com/ajoabraham/tweet_watch/master/timeline_streaming.png)
 
 ## Installation
 
